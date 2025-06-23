@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-In-One Video Downloader | MP4, MP3, Images</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --accent: #f72585;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #f9fafc;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .premium-header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .premium-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .premium-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .premium-nav a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .premium-nav a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: var(--gradient);
+            color: white;
+            padding: 6rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Download Form */
+        .download-container {
+            max-width: 1200px;
+            margin: -3rem auto 0;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .download-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .download-form {
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #eee;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 1.25rem 1.5rem;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .download-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0 2.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn:hover {
+            background: #d91a6d;
+        }
+
+        /* Format Options */
+        .format-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .format-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .format-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .format-card.active {
+            border-color: var(--primary);
+            background: #f5f7ff;
+        }
+
+        .format-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .format-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .format-desc {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Features Section */
+        .section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .premium-footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .download-form {
+                flex-direction: column;
+                border-radius: 12px;
+            }
+            
+            .download-btn {
+                padding: 1rem;
+                justify-content: center;
+            }
+            
+            .tab-buttons {
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="premium-header">
+        <div class="header-container">
+            <a href="#" class="premium-logo">
+                <i class="fas fa-download"></i>
+                <span>All-In-One Downloader</span>
+            </a>
+
+            <nav class="premium-nav">
+                <a href="#">Home</a>
+                <a href="#">How It Works</a>
+                <a href="#">Supported Sites</a>
+                <a href="#" class="btn btn-primary">Premium</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-container">
+            <h1 class="hero-title">Download Videos, Music & Images</h1>
+            <p class="hero-subtitle">Convert and download content from YouTube, Instagram, TikTok and 1000+ other sites in MP4, MP3, JPG and more formats</p>
+        </div>
+    </section>
+
+    <div class="download-container">
+        <div class="download-card">
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="video"><i class="fas fa-video"></i> Video</button>
+                <button class="tab-btn" data-tab="audio"><i class="fas fa-music"></i> Audio</button>
+                <button class="tab-btn" data-tab="image"><i class="fas fa-image"></i> Images</button>
+            </div>
+
+            <div class="tab-content active" id="video-tab">
+                <div class="download-form">
+                    <input type="url" class="url-input" placeholder="Paste YouTube, Instagram, TikTok etc. URL here...">
+                    <button class="download-btn"><i class="fas fa-download"></i> Download</button>
+                </div>
+
+                <div class="format-options">
+                    <div class="format-card active" data-format="mp4-hd">
+                        <div class="format-icon"><i class="fas fa-film"></i></div>
+                        <div class="format-name">MP4 HD</div>
+                        <div class="format-desc">1080p • Best Quality</div>
+                    </div>
+                    <div class="format-card" data-format="mp4-sd">
+                        <div class="format-icon"><i class="fas fa-film"></i></div>
+                        <div class="format-name">MP4 SD</div>
+                        <div class="format-desc">720p • Balanced</div>
+                    </div>
+                    <div class="format-card" data-format="webm">
+                        <div class="format-icon"><i class="fas fa-file-video"></i></div>
+                        <div class="format-name">WEBM</div>
+                        <div class="format-desc">High Quality</div>
+                    </div>
+                    <div class="format-card" data-format="mp4-4k">
+                        <div class="format-icon"><i class="fas fa-tv"></i></div>
+                        <div class="format-name">4K Ultra HD</div>
+                        <div class="format-desc">2160p • Premium</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="audio-tab">
+                <div class="download-form">
+                    <input type="url" class="url-input" placeholder="Paste music or video URL here...">
+                    <button class="download-btn"><i class="fas fa-download"></i> Convert</button>
+                </div>
+
+                <div class="format-options">
+                    <div class="format-card active" data-format="mp3-320">
+                        <div class="format-icon"><i class="fas fa-music"></i></div>
+                        <div class="format-name">MP3 320kbps</div>
+                        <div class="format-desc">High Quality Audio</div>
+                    </div>
+                    <div class="format-card" data-format="mp3-128">
+                        <div class="format-icon"><i class="fas fa-music"></i></div>
+                        <div class="format-name">MP3 128kbps</div>
+                        <div class="format-desc">Standard Quality</div>
+                    </div>
+                    <div class="format-card" data-format="wav">
+                        <div class="format-icon"><i class="fas fa-wave-square"></i></div>
+                        <div class="format-name">WAV</div>
+                        <div class="format-desc">Lossless Audio</div>
+                    </div>
+                    <div class="format-card" data-format="m4a">
+                        <div class="format-icon"><i class="fas fa-file-audio"></i></div>
+                        <div class="format-name">M4A</div>
+                        <div class="format-desc">AAC Format</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="image-tab">
+                <div class="download-form">
+                    <input type="url" class="url-input" placeholder="Paste Instagram, Pinterest, Flickr etc. URL here...">
+                    <button class="download-btn"><i class="fas fa-download"></i> Download</button>
+                </div>
+
+                <div class="format-options">
+                    <div class="format-card active" data-format="jpg-hd">
+                        <div class="format-icon"><i class="fas fa-image"></i></div>
+                        <div class="format-name">JPG HD</div>
+                        <div class="format-desc">High Quality</div>
+                    </div>
+                    <div class="format-card" data-format="png">
+                        <div class="format-icon"><i class="fas fa-image"></i></div>
+                        <div class="format-name">PNG</div>
+                        <div class="format-desc">Transparent BG</div>
+                    </div>
+                    <div class="format-card" data-format="webp">
+                        <div class="format-icon"><i class="fas fa-file-image"></i></div>
+                        <div class="format-name">WEBP</div>
+                        <div class="format-desc">Modern Format</div>
+                    </div>
+                    <div class="format-card" data-format="original">
+                        <div class="format-icon"><i class="fas fa-camera"></i></div>
+                        <div class="format-name">Original</div>
+                        <div class="format-desc">Highest Quality</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="section">
+        <h2 class="section-title">Why Choose Our Downloader</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                <h3 class="feature-title">Super Fast</h3>
+                <p>Download videos at maximum speed with our optimized servers.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3 class="feature-title">100% Safe</h3>
+                <p>No malware or viruses. Your privacy is protected.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-infinity"></i></div>
+                <h3 class="feature-title">Unlimited Downloads</h3>
+                <p>No restrictions on how many videos you can download.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Supported Platforms</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fab fa-youtube"></i></div>
+                <h3 class="feature-title">YouTube</h3>
+                <p>Download videos, shorts, and music.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fab fa-instagram"></i></div>
+                <h3 class="feature-title">Instagram</h3>
+                <p>Download Reels, Stories, and posts.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fab fa-tiktok"></i></div>
+                <h3 class="feature-title">TikTok</h3>
+                <p>Save videos without watermark.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="premium-footer">
+        <div class="footer-container">
+            <p>&copy; 2023 All-In-One Downloader. All rights reserved.</p>
+            <p style="margin-top: 1rem; opacity: 0.7;">Disclaimer: This tool is for personal use only.</p>
+        </div>
+    </footer>
+
+<script>
+  // Tab switching functionality
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      const tabId = btn.getAttribute('data-tab') + '-tab';
+      document.getElementById(tabId).classList.add('active');
+    });
+  });
+
+  // Format selection functionality
+  const formatCards = document.querySelectorAll('.format-card');
+  formatCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const parentTab = card.closest('.tab-content');
+      parentTab.querySelectorAll('.format-card').forEach(c => {
+        c.classList.remove('active');
+      });
+      card.classList.add('active');
+    });
+  });
+
+  // Download button functionality
+  const downloadBtns = document.querySelectorAll('.download-btn');
+  downloadBtns.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const input = btn.parentElement.querySelector('.url-input');
+      const url = input.value.trim();
+      
+      if (!url) {
+        showAlert('Please enter a valid URL', 'error');
+        return;
+      }
+
+      try {
+        const activeTab = btn.closest('.tab-content').id;
+        const activeFormat = btn.closest('.tab-content')
+          .querySelector('.format-card.active')
+          .getAttribute('data-format');
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        
+        // Determine endpoint based on URL
+        let endpoint = '/download/generic';
+        let format = activeFormat;
+        
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+          endpoint = '/download/youtube';
+          if (activeTab === 'audio-tab') format = 'mp3';
+          else if (activeFormat.includes('hd')) format = 'hd';
+          else format = 'sd';
+        } 
+        else if (url.includes('instagram.com')) {
+          endpoint = '/download/instagram';
+        }
+        else if (url.includes('tiktok.com')) {
+          endpoint = '/download/tiktok';
+        }
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url, format })
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Download failed');
+        }
+
+        // Create download link
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = getDownloadFilename(url, activeTab, activeFormat);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(downloadUrl);
+
+        showAlert('Download started!', 'success');
+        
+      } catch (err) {
+        showAlert(err.message, 'error');
+        console.error('Download error:', err);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-download"></i> Download';
+      }
+    });
+  });
+
+  function showAlert(message, type) {
+    const alertBox = document.createElement('div');
+    alertBox.className = `alert-${type}`;
+    alertBox.style.position = 'fixed';
+    alertBox.style.bottom = '20px';
+    alertBox.style.right = '20px';
+    alertBox.style.padding = '15px 25px';
+    alertBox.style.background = type === 'error' ? '#ff4444' : '#00C851';
+    alertBox.style.color = 'white';
+    alertBox.style.borderRadius = '4px';
+    alertBox.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+    alertBox.style.zIndex = '1000';
+    alertBox.textContent = message;
+    
+    document.body.appendChild(alertBox);
+    setTimeout(() => {
+      alertBox.style.opacity = '0';
+      setTimeout(() => document.body.removeChild(alertBox), 300);
+    }, 3000);
+  }
+
+  function getDownloadFilename(url, tab, format) {
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+    
+    if (tab === 'video-tab') {
+      if (format.includes('mp4')) return `video-${dateStr}.mp4`;
+      if (format.includes('webm')) return `video-${dateStr}.webm`;
+    }
+    else if (tab === 'audio-tab') {
+      if (format.includes('mp3')) return `audio-${dateStr}.mp3`;
+      if (format.includes('wav')) return `audio-${dateStr}.wav`;
+      if (format.includes('m4a')) return `audio-${dateStr}.m4a`;
+    }
+    else if (tab === 'image-tab') {
+      if (format.includes('jpg')) return `image-${dateStr}.jpg`;
+      if (format.includes('png')) return `image-${dateStr}.png`;
+      if (format.includes('webp')) return `image-${dateStr}.webp`;
+    }
+    
+    return `download-${dateStr}.${format.split('-')[0]}`;
+  }
+</script>
+</body>
+</html>
